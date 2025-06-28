@@ -10,6 +10,7 @@
 - **이름:** 김영준  
 - **전화번호:** 010-6238-4056  
 - **이메일:** [bill5500@naver.com](bill5500@naver.com)
+- **Notion:** [영준김의 노션](https://www.notion.so/2202eed3382780a7864fe39159b88c17?source=copy_link)
 
 ---
 
