@@ -21,29 +21,18 @@
 
 | 년도 | 내용 |
 |------|------|
-| 2025.01 ~ 2025.12 | SSAFY 13기 Java 비전공반 입과 |
+| 2025.01 ~ 2025.12 | SSAFY(삼성 청년 SW AI 아카데미) 13기 Java반 입과 |
 | 2025.02 | 중앙대학교 졸업 (건설환경플랜트공학과 주전공, 소프트웨어 및 창업학 융합전공) |
 | 1998.04 | 출생 |
 
 
 ---
 
-## 💻 기술 프로젝트
+## 💻 프로젝트
 
-- **졸업 논문**  
-  인공지능 기반 Computer Vision 기술을 활용한  
-  **ArUco Marker 인식 + Dual-Camera 시스템**으로  
-  교량의 처짐을 측정하는 하드웨어를 설계 및 구현
-
-- **창업 프로젝트**  
-  한국과 베트남 학생 간 협업으로 창업 아이템을 기획하고 프로젝트 수행  
-  - 한국창업교육협의회장상 수상  
-  - 👉 [관련 기사 보기](https://www.hani.co.kr/arti/economy/biznews/1118575.html)
+- Reptopia (도마뱀 플랫폼 서비스)
+- Keeping (선결제 서비스)
   
-  여러 캡스톤 디자인 수상 (창업부문)
-  - 22.08 우수상 수여 (영양제 추천 앱 기획)
-  - 23.02 우수상 수여 (교통 편리 앱 기획)
-
 ---
 
 ## 🛠 기술 스택
@@ -51,10 +40,9 @@
 | 구분 | 기술 |
 |------|------|
 | 언어 | Java, Python, C |
-| 백엔드 | Spring Boot, Spring MVC, JPA, **Spring Data JPA**, **QueryDSL** |
-| 데이터베이스 | MySQL, H2 |
-| DevOps / 클라우드 | AWS, Docker, Kubernetes, Nginx |
-| 협업 도구 | Git, Slack, Notion |
+| 백엔드 | **Spring Boot**, JPA, **Spring Data JPA**, QueryDSL |
+| 데이터베이스 | MySQL, PostgreSQL |
+| 협업 도구 | **Git**, **Notion**, Jira |
 
 ---
 
