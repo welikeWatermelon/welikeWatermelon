@@ -40,7 +40,7 @@
 | 구분 | 기술 |
 |------|------|
 | 언어 | Java, Python, C |
-| 백엔드 | **Spring Boot**, JPA, **Spring Data JPA**, QueryDSL |
+| 백엔드 | **Spring Boot**, **Spring Data JPA**, QueryDSL |
 | 데이터베이스 | MySQL, PostgreSQL |
 | 협업 도구 | **Git**, **Notion**, Jira |
 
