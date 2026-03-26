@@ -43,7 +43,8 @@ Velog : https://velog.io/@k_joon_
 <br>
 
 ### 🍉 MelonMe *(개발 중)*
-> 현재 진행 중인 프로젝트
+> Claude Code의 Sub-Agents들로 병렬로 구현하고 있으며, Team-Agents를 통해 상호작용하는 Agents들로 구성.
+> 프로토타입 완성하였고, 디벨롭 시킬 에정  
 
 <br>
 
