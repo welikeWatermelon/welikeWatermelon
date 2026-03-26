@@ -42,9 +42,14 @@ Velog : https://velog.io/@k_joon_
 
 <br>
 
-### 🍉 MelonMe *(개발 중)*
-> Claude Code의 Sub-Agents들로 병렬로 구현하고 있으며, Team-Agents를 통해 상호작용하는 Agents들로 구성.
-> 프로토타입 완성하였고, 디벨롭 시킬 에정  
+### 🍉 MelonMe *(개발 중 - CLAUDE AI 적극 활용)*🍈 MelloMe
+>치료사 전용 폐쇄형 커뮤니티 플랫폼 `2026.03 ~`
+
+* 14개 멀티에이전트(SubAgents/Team Agents) 기반 Claude Code 워크플로우 설계 → 백엔드 9개 도메인 병렬 구현으로 개발 시간 단축
+* 도메인별 CLAUDE.md 계층 분리로 에이전트당 불필요한 컨텍스트 제거 → 토큰 효율 최적화
+* PROGRESS.md 기반 SubAgents → Team Agents 인수인계 구조 설계 → 세션 종료 후에도 컨텍스트 재탐색 없이 통합테스트 즉시 진행
+* SSE 기반 실시간 알림 + Redis 카운터 캐싱(조회수 5분, 좋아요 1분 배치) → DB 부하 분산
+* Soft Delete 전략 + S3 배치 삭제(매일 새벽 3시)로 데이터 정합성 유지 및 스토리지 비용 관리
 
 <br>
 
