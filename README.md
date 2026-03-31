@@ -3,8 +3,8 @@
 > 데이터 정합성과 시스템 안정성에 집착하는 백엔드 개발자입니다.  
 > 단순히 동작하는 것에 만족하지 않고, 장애 상황까지 설계합니다.
 
-Velog : https://velog.io/@k_joon_
-
+Velog : [https://velog.io/@k_joon_
+](https://velog.io/@k_joon_/posts)
 <br>
 
 ## 🛠 Tech Stack
