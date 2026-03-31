@@ -42,7 +42,7 @@ Velog : [https://velog.io/@k_joon_
 
 <br>
 
-### 🍉 MelonMe *(개발 중 - CLAUDE AI 적극 활용)*🍈 MelloMe
+### 🍈 MellonMe *(개발 중 - CLAUDE AI 적극 활용)*
 >치료사 전용 폐쇄형 커뮤니티 플랫폼 `2026.03 ~`
 
 * 14개 멀티에이전트(SubAgents/Team Agents) 기반 Claude Code 워크플로우 설계 → 백엔드 9개 도메인 병렬 구현으로 개발 시간 단축
