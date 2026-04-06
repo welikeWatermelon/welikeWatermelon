@@ -57,7 +57,7 @@ Velog : [https://velog.io/@k_joon_
 
 ## 📊 GitHub Stats
 
-<img height="160" src="https://github-readme-stats.vercel.app/api/top-langs/?username=welikeWatermelon&layout=compact&theme=default&hide_border=true&cache_seconds=1800" />
+<img height="160" src="https://leetcard.jacoblin.cool/welikeWatermelon?theme=light&font=Noto%20Sans" />
 
 <br>
 
