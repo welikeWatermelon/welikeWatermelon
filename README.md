@@ -51,6 +51,9 @@ Velog : [https://velog.io/@k_joon_
 - SSE 기반 실시간 알림 + Redis 카운터 캐싱(조회수 5분, 좋아요 1분 배치) → DB 부하 분산
 
 <br>
+## Claude Code Tokens Usage
+
+![Claude Token Usage](https://raw.githubusercontent.com/welikeWatermelon/claude-usage/main/token-heatmap.svg)
 
 ## 📊 GitHub Stats
 
