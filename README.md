@@ -56,10 +56,6 @@ Velog : [https://velog.io/@k_joon_
 
 ![Claude Token Usage](https://raw.githubusercontent.com/welikeWatermelon/claude-usage/main/token-heatmap.svg)
 
-## 📊 GitHub Stats
-
-<img height="160" src="https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api/top-langs/?username=welikeWatermelon&layout=compact&theme=default&hide_border=true" />
-
 <br>
 
 ## 🏆 Baekjoon
