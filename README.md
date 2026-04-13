@@ -52,11 +52,17 @@ Last-Event-ID 기반 유실 이벤트 자동 복구, 사용자당 다중 탭 커
 - 계층형 `CLAUDE.md`로 도메인별 컨텍스트 분리 (auth / store / inventory / widget) → 에이전트가 company_id 격리 규칙 자동 참조
 - `PROGRESS.md` 기반 단계별 진행 기록 + 트러블슈팅 14건 전수 문서화 → 의사결정 과정 추적 가능
 
+**Google Maps Platform 풀스택 연동**
+- **Maps JavaScript API** — 매장 핀 + InfoWindow 렌더링, 위젯 JS 내 동적 스크립트 로드 (`__bizmapMapsCallbacks` 큐로 다중 위젯 환경에서 단일 로드 보장)
+- **Places API (New)** — deprecated `AutocompleteService` → `AutocompleteSuggestion.fetchAutocompleteSuggestions()` Promise 기반 마이그레이션, `AutocompleteSessionToken`으로 Autocomplete N회 + Place Details 1회를 단일 세션 과금으로 비용 최적화, 300ms 디바운싱 적용
+- **Geocoding API** — 매장 등록 시 주소 ↔ 좌표 변환
+- **Address Validation API** — 매장 등록/수정 시 실존 주소 검증 + `normalizedAddress` 자동 정규화 저장, API 장애 시 fallback 처리로 서비스 중단 없음
+
 **구현 기능**
 - **멀티테넌트 데이터 격리** — JWT payload의 `companyId` 기반 company_id 검증, 불일치 시 403 반환으로 타사 데이터 접근 원천 차단
-- **매장 찾기 위젯 임베드** — 위젯 키 발급 시스템 구축, 백엔드가 JS 동적 생성 시 Maps API 키 서버사이드 인라인 주입 → 고객사는 두 줄로 임베드 완료
-- **PostGIS 공간 쿼리** — `ST_DWithin` / `ST_Distance` + GiST 인덱스로 반경 내 매장 거리순 정렬, Haversine 대비 정확도 향상
-- **Places API (New) 마이그레이션** — deprecated `AutocompleteService` → `AutocompleteSuggestion` Promise 기반 전환, 세션 토큰 + 300ms 디바운싱으로 API 비용 최적화
+- **매장 찾기 위젯 임베드** — 위젯 키 발급 + `allowedOrigin` 도메인 제한, 백엔드가 JS 동적 생성 시 Maps API 키 서버사이드 인라인 주입 → 고객사는 두 줄로 임베드 완료
+- **PostGIS 공간 쿼리** — `ST_DWithin` / `ST_Distance` + GiST 인덱스로 반경 내 매장 거리순 정렬, Haversine 대비 WGS84 타원체 기반 정확도 향상
+- **재고 기반 매장 찾기** — 상품/사이즈 선택 시 재고 1개 이상 매장만 필터, 브라우저 Geolocation으로 현재 위치 기반 거리순 정렬, Google Maps 딥링크로 자동차/도보 길찾기 연결
 - **Redis 캐싱 + 사용량 집계** — 위젯/핀 TTL 캐시, 매장 CUD 시 즉시 evict, INCR 기반 일별 호출량 카운팅 → DB 조회값과 Redis 당일 카운터 합산으로 자정 flush 전후 정합성 보장
 
 <br>
