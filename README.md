@@ -45,6 +45,22 @@ Last-Event-ID 기반 유실 이벤트 자동 복구, 사용자당 다중 탭 커
 
 <br>
 
+### 🗺️ BizMap
+> B2B 매장 위치 관리 · 위젯 임베드 플랫폼 `2026.04 ~ 2026.04`
+
+**CLAUDE CODE**
+- 계층형 `CLAUDE.md`로 도메인별 컨텍스트 분리 (auth / store / inventory / widget) → 에이전트가 company_id 격리 규칙 자동 참조
+- `PROGRESS.md` 기반 단계별 진행 기록 + 트러블슈팅 14건 전수 문서화 → 의사결정 과정 추적 가능
+
+**구현 기능**
+- **멀티테넌트 데이터 격리** — JWT payload의 `companyId` 기반 company_id 검증, 불일치 시 403 반환으로 타사 데이터 접근 원천 차단
+- **매장 찾기 위젯 임베드** — 위젯 키 발급 시스템 구축, 백엔드가 JS 동적 생성 시 Maps API 키 서버사이드 인라인 주입 → 고객사는 두 줄로 임베드 완료
+- **PostGIS 공간 쿼리** — `ST_DWithin` / `ST_Distance` + GiST 인덱스로 반경 내 매장 거리순 정렬, Haversine 대비 정확도 향상
+- **Places API (New) 마이그레이션** — deprecated `AutocompleteService` → `AutocompleteSuggestion` Promise 기반 전환, 세션 토큰 + 300ms 디바운싱으로 API 비용 최적화
+- **Redis 캐싱 + 사용량 집계** — 위젯/핀 TTL 캐시, 매장 CUD 시 즉시 evict, INCR 기반 일별 호출량 카운팅 → DB 조회값과 Redis 당일 카운터 합산으로 자정 flush 전후 정합성 보장
+
+<br>
+
 ### 🔖 KEEPING
 > QR 기반 디지털 장부 선결제 서비스 `2025.08 ~ 2025.10` `2026.01 ~ 2026.02`
 
