@@ -36,6 +36,7 @@ Velog : [https://velog.io/@k_joon_
 ### 🦎 REPTOPIA
 > 파충류 이력 관리 기반 신뢰 거래 플랫폼 `2025.10 ~ 2025.12`
 
+**구현 기능**
 - **CQRS + Facade 패턴** 도입으로 순환 참조 및 도메인 강결합 해소
 - Event-Driven 아키텍처로 Side-effect 처리 전환 → 도메인 간 결합도 50% 감소, 코드 40% 감축
 - Elasticsearch 없이 PostgreSQL GIN / GiST 인덱스만으로 검색 파이프라인 구축, 추가 인프라 비용 없이 검색 성능 확보
@@ -45,10 +46,23 @@ Velog : [https://velog.io/@k_joon_
 ### 🍈 MellonMe *(개발 중 - CLAUDE AI 적극 활용)*
 >치료사 전용 커뮤니티 플랫폼 `2026.03 ~`
 
-- 14개 멀티에이전트(SubAgents/Team Agents) 기반 Claude Code 워크플로우 설계 → 백엔드 9개 도메인 병렬 구현으로 개발 시간 단축
-- 도메인별 CLAUDE.md 계층 분리로 에이전트당 불필요한 컨텍스트 제거 → 토큰 효율 최적화
-- PROGRESS.md 기반 SubAgents → Team Agents 인수인계 구조 설계 → 세션 종료 후에도 컨텍스트 재탐색 없이 통합테스트 즉시 진행
-- SSE 기반 실시간 알림 + Redis 카운터 캐싱(조회수 5분, 좋아요 1분 배치) → DB 부하 분산
+**CLAUDE CODE**
+- 도메인별 `/slash command` 17개 구축 (탐색 12 + 코드 생성 4 + 커밋 자동화 1) → 에이전트가  
+컨벤션을 자동 참조하며 일관된 코드 생성
+- 계층형 `CLAUDE.md`로 도메인별 컨텍스트 분리 (엔티티 규칙, DDD 경계 원칙, DTO/서비스       
+컨벤션) → 불필요한 토큰 소비 제거
+- Pre-commit Hook으로 시크릿 하드코딩 자동 차단 (`application-local.yaml` 스테이징 감지 +   
+password/secret 패턴 검사)
+- `PROGRESS.md` 기반 SubAgents → Team Agents 인수인계 구조 설계 → 세션 종료 후에도 컨텍스트 
+재탐색 없이 즉시 작업 재개
+
+**구현 기능**
+- PostgreSQL `pg_trgm` GIN 인덱스 기반 **관련도 검색** 구축 — `similarity` 점수 + `ILIKE`   
+병렬 조건으로 초성/텍스트 통합 검색, `numeric(10,8)` 캐스팅으로 커서 정밀도 보장
+- **인기순 피드 무한스크롤** — `(popularityScore, id)` 복합 커서 기반 페이지네이션,
+반응/스크랩 토글 시 점수 실시간 갱신
+- **SSE 실시간 알림** — `@TransactionalEventListener` + `@Async` 전용 스레드풀,
+Last-Event-ID 기반 유실 이벤트 자동 복구, 사용자당 다중 탭 커넥션 지원
 
 <br>
 
