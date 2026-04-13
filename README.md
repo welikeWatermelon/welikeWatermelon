@@ -60,7 +60,7 @@ Velog : [https://velog.io/@k_joon_
 
 ## 🏆 Baekjoon
 
-[![Solved.ac Profile](https://mazassumnida.wtf/api/v2/generate_badge?boj=bill5500)](https://solved.ac/bill5500)
+[![Solved.ac Profile](https://mazassumnida.wtf/api/v2/generate_badge?boj=bill5500&v=1)](https://solved.ac/bill5500)
 
 <br>
 
