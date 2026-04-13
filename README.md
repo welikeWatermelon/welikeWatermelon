@@ -22,6 +22,29 @@ Velog : [https://velog.io/@k_joon_
 
 ## 📂 Projects
 
+### 🍈 MellonMe *(개발 중)*
+>치료사 전용 커뮤니티 플랫폼 `2026.03 ~`
+
+**CLAUDE CODE**
+- 도메인별 `/slash command` 17개 구축 (탐색 12 + 코드 생성 4 + 커밋 자동화 1) → 에이전트가  
+컨벤션을 자동 참조하며 일관된 코드 생성
+- 계층형 `CLAUDE.md`로 도메인별 컨텍스트 분리 (엔티티 규칙, DDD 경계 원칙, DTO/서비스       
+컨벤션) → 불필요한 토큰 소비 제거
+- Pre-commit Hook으로 시크릿 하드코딩 자동 차단 (`application-local.yaml` 스테이징 감지 +   
+password/secret 패턴 검사)
+- `PROGRESS.md` 기반 SubAgents → Team Agents 인수인계 구조 설계 → 세션 종료 후에도 컨텍스트 
+재탐색 없이 즉시 작업 재개
+
+**구현 기능**
+- PostgreSQL `pg_trgm` GIN 인덱스 기반 **관련도 검색** 구축 — `similarity` 점수 + `ILIKE`   
+병렬 조건으로 초성/텍스트 통합 검색, `numeric(10,8)` 캐스팅으로 커서 정밀도 보장
+- **인기순 피드 무한스크롤** — `(popularityScore, id)` 복합 커서 기반 페이지네이션,
+반응/스크랩 토글 시 점수 실시간 갱신
+- **SSE 실시간 알림** — `@TransactionalEventListener` + `@Async` 전용 스레드풀,
+Last-Event-ID 기반 유실 이벤트 자동 복구, 사용자당 다중 탭 커넥션 지원
+
+<br>
+
 ### 🔖 KEEPING
 > QR 기반 디지털 장부 선결제 서비스 `2025.08 ~ 2025.10` `2026.01 ~ 2026.02`
 
@@ -44,28 +67,7 @@ Velog : [https://velog.io/@k_joon_
 
 <br>
 
-### 🍈 MellonMe *(개발 중 - CLAUDE AI 적극 활용)*
->치료사 전용 커뮤니티 플랫폼 `2026.03 ~`
 
-**CLAUDE CODE**
-- 도메인별 `/slash command` 17개 구축 (탐색 12 + 코드 생성 4 + 커밋 자동화 1) → 에이전트가  
-컨벤션을 자동 참조하며 일관된 코드 생성
-- 계층형 `CLAUDE.md`로 도메인별 컨텍스트 분리 (엔티티 규칙, DDD 경계 원칙, DTO/서비스       
-컨벤션) → 불필요한 토큰 소비 제거
-- Pre-commit Hook으로 시크릿 하드코딩 자동 차단 (`application-local.yaml` 스테이징 감지 +   
-password/secret 패턴 검사)
-- `PROGRESS.md` 기반 SubAgents → Team Agents 인수인계 구조 설계 → 세션 종료 후에도 컨텍스트 
-재탐색 없이 즉시 작업 재개
-
-**구현 기능**
-- PostgreSQL `pg_trgm` GIN 인덱스 기반 **관련도 검색** 구축 — `similarity` 점수 + `ILIKE`   
-병렬 조건으로 초성/텍스트 통합 검색, `numeric(10,8)` 캐스팅으로 커서 정밀도 보장
-- **인기순 피드 무한스크롤** — `(popularityScore, id)` 복합 커서 기반 페이지네이션,
-반응/스크랩 토글 시 점수 실시간 갱신
-- **SSE 실시간 알림** — `@TransactionalEventListener` + `@Async` 전용 스레드풀,
-Last-Event-ID 기반 유실 이벤트 자동 복구, 사용자당 다중 탭 커넥션 지원
-
-<br>
 
 ## Claude Code Tokens Usage
 
