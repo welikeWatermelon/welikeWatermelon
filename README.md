@@ -77,19 +77,6 @@ Velog : [https://velog.io/@k_joon_
 - Event-Driven 아키텍처로 Side-effect 처리 전환 → 도메인 간 결합도 50% 감소, 코드 40% 감축
 - Elasticsearch 없이 PostgreSQL GIN / GiST 인덱스만으로 검색 파이프라인 구축, 추가 인프라 비용 없이 검색 성능 확보
 
-<br>
-
-
-
-## Claude Code Tokens Usage
-
-![Claude Token Usage](https://raw.githubusercontent.com/welikeWatermelon/claude-usage/main/token-heatmap.svg)
-
-<br>
-
-## 🏆 Baekjoon
-
-[![Solved.ac Profile](https://mazassumnida.wtf/api/v2/generate_badge?boj=bill5500&v=1)](https://solved.ac/bill5500)
 
 <br>
 
