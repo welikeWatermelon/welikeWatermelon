@@ -14,69 +14,69 @@ Velog : [https://velog.io/@k_joon_
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
 
 **Database**  
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
 
 <br>
 
 ## 📂 Projects
 
-### 🍈 MellonMe *(개발 중)*
-> 인지 발달 치료사 전용 커뮤니티 플랫폼 `2026.03 ~`
-> `Java` `Spring Boot` `PostgreSQL` `pgvector` `Redis` `React`
-> 백엔드 2 · 프론트 1 · 인프라 2 · 디자이너 1 · PM 1
+### 🍈 MelonMe
 
-**담당** · 검색 엔진 · 실시간 알림 · TDD 주도 개발 · Claude Code 협업 환경 구축
+> 인지 발달 치료사를 위한 치료 자료 공유 및 커뮤니티 플랫폼 `2026.01 ~ 2026.07`
+> `Java` `Spring Boot` `Spring AI` `JPA` `PostgreSQL` `Redis`
+> 백엔드 2 · 프론트 1 · 클라우드 2 · 디자이너 1 · PM 1
+> 🔗 [melonnetherapists.com](https://www.melonnetherapists.com/) · MAU 29 → 타겟 10,000명 기준 인프라 설계
 
-#### 설계
-- **DDD 경계 정리 & 순환 참조 해결** — 양방향 의존으로 Spring 빈 생성이 불안정해지던 구조를 발생 유형별로 분리. Service 간 직접 호출 순환은 **Facade 패턴**, N개 발생 지점이 동일 처리를 요구하는 구간은 **동기 Event**로 해결. 타 도메인 Repository 직접 참조를 제거해 변경 전파를 차단하고, MSA 전환에 유리한 경계 확보
-- **Strategy 패턴 기반 검색 엔진 전환 구조** — `PostSearchStrategy`로 추상화해 GIN trigram을 기본 전략으로 운영하고, *검색 결과 0건 비율 또는 낮은 관련도 결과 비율이 30% 이상 지속될 때* `pgvector + OpenAI + HNSW` 전략으로 설정 기반 전환 가능하게 설계
+**담당** · 검색 · SSE 실시간 처리 · 운영/JVM 튜닝 · Claude Code 협업 환경
 
-#### 구현 기능
-- **PostgreSQL `pg_trgm` GIN 인덱스 기반 관련도 검색** — `similarity` 점수 + `ILIKE` 병렬 조건으로 초성/텍스트 통합 검색, `numeric(10,8)` 캐스팅으로 커서 정밀도 보장. 더미 데이터 기준 B-Tree 대비 응답시간 **47% 단축**
-- **인기순 피드 무한스크롤** — `(popularityScore, id)` 복합 커서 기반 페이지네이션, 반응/스크랩 토글 시 점수 실시간 갱신
-- **SSE 실시간 알림** — `@TransactionalEventListener` + `@Async` 전용 스레드풀, `Last-Event-ID` 기반 유실 이벤트 자동 복구, 사용자당 다중 탭 커넥션 지원
+#### 검색 성능
+
+- Full Table Scan과 정확 일치 검색의 한계를 **pg_trgm + GIN 인덱스**로 개선, 부분 문자열 검색에서도 인덱스 적용 → 응답 시간 **47% 단축**
+- 검색 로직을 **Strategy 패턴**으로 추상화 → 데이터 증가·유사어 요구 시 `pgvector + OpenAI 임베딩 + HNSW`로 코드 수정 없이 전환 가능. 외부 검색 엔진 없이 성능 개선과 비용 절감
+
+#### SSE 대규모 연결
+
+- 톰캣 thread-per-request 구조에서 동시 SSE 연결이 **~6,000에서 OOM으로 다운**되는 문제를 **네티 event-loop 분리**로 해결 → 최대 동시 연결 **6,000 → 20,000+ (3.3배)**, 부하 시 스레드 **218 → 19 (91% 감소)**
+
+#### 아키텍처 · 운영 안정성
+
+- 도메인 간 순환 참조를 **Facade 패턴 + 도메인 Event**로 의존 방향 정리, DDD 원칙에 맞는 도메인 경계 확보
+- `application.yml`에 **DB 연결 획득/쿼리 실행 이중 fail-fast 타임아웃** 적용 → 슬로우 쿼리·커넥션 풀 고갈의 장애 전파 차단
+- JVM에 **OOM 힙덤프 자동 생성 + GC 로깅** 도입 → 장애 사후 분석과 GC 관측 가능
 
 #### Claude Code 협업 환경
-- **도메인별 `/slash command` 17개 구축** (탐색 12 + 코드 생성 4 + 커밋 자동화 1) → 에이전트가 컨벤션을 자동 참조하며 일관된 코드 생성
-- **계층형 `CLAUDE.md`로 도메인별 컨텍스트 분리** (엔티티 규칙, DDD 경계 원칙, DTO/서비스 컨벤션) → 불필요한 토큰 소비 제거
-- **Pre-commit Hook으로 시크릿 하드코딩 자동 차단** (`application-local.yaml` 스테이징 감지 + `password/secret` 패턴 검사)
-- **`PROGRESS.md` 기반 SubAgents → Team Agents 인수인계 구조** 설계 → 세션 종료 후에도 컨텍스트 재탐색 없이 즉시 작업 재개
+
+- main 브랜치에서 작업 명령 시 **다른 브랜치로 이동을 제안하는 보호 게이트** 설계 → 운영 코드 직접 변경 차단
+- AI 코드 변경을 감지해 **날짜/명령/응답을 기록하는 로그 구조** 구축 → 모든 변경 내역 추적 가능
 
 <br>
 
 ### 🔖 KEEPING
-> QR 기반 디지털 장부 선결제 서비스 `2025.08 ~ 2025.10` `2026.01 ~ 2026.02`
-> `Java` `Spring Boot` `MySQL` `Redis` `Next.js` `React`
+
+> QR 기반 디지털 장부 선결제 서비스 `2025.10 ~ 2025.12`
+> `Java` `Spring Boot` `JPA` `MySQL` `Redis` `AWS`
 > 백엔드 3 · 프론트 3
 
-**담당** · QR 결제 서버 · 서버 분리 및 캐싱 · 분산 환경 정합성 설계
+**담당** · QR 결제 서버 분리 · 캐싱 · 분산 환경 정합성
 
-#### 결제 병목 개선 — 서버 분리 + Webhook 기반 캐싱
-- 모놀리스에서 **QR 결제 서버를 분리하고 ACL 패턴 적용** → 배포 독립성 확보 및 자원 격리
-- 결제 흐름에서 필요한 메뉴/가게 정보는 **Webhook 기반 Push 캐싱(Event-Driven)** 으로 동기 호출 최소화. 잔액처럼 실시간 정합성이 필수인 데이터는 캐싱 제외 기준 명문화
-- 결제 응답시간 **86% 단축 (1,923ms → 262ms)** · QR 결제 저하 비율 **4.2× → 1.74×** (-59%)
+#### 성능
 
-#### 장애 복구 및 정합성 — 단계별 방어선 설계
-- 서버 분리로 결제 흐름이 두 서버·두 DB에 걸치며 발생하는 "결과 미확정" 상태를 **멱등성 키 + 상태 플래그 기반 3단계 자동 복구 전략**으로 해소
-- 멱등키 + SHA-256 해시로 중복 요청 차단, Circuit Breaker로 약 8초 내 장애 격리, `UNCERTAIN` 상태는 별도 트랜잭션 격리 후 사후 자동 복구 루프로 처리
-- 멱등키 · 상태 검증 · 낙관적 락 · 비관적 락 조합으로 동시성 충돌 해소 → **추가 인프라 비용 없이 데이터 정합성 보장**
+- QR 결제·지갑 서비스가 한 서버에 묶여 발생한 부하를 **서버 분리 + Redis 캐싱(Webhook 즉시 갱신)** 으로 해결 → 결제 저하 비율 **4.2배 → 1.74배**, 응답 시간 **1,084ms → 262ms**
+- 커넥션 풀 부재로 인한 TIME_WAIT 누적·포트 고갈 위험을 **HttpClient5 커넥션 풀 + 벌크헤드**로 해소, **리틀의 법칙**으로 풀 크기 산정, `ss`·`tcpdump`로 연결 재사용 검증
 
-#### 성능 · 관측성
-- **B-Tree 복합 인덱스 최적화** → 데이터 탐색 성능 **98% 개선 (2,075ms → 24ms)**
-- **Micrometer Tracing으로 분산 서비스 간 End-to-End TraceId 추적 환경 구축** → 장애 분석 시간 **83% 단축**
+#### 분산 환경 정합성
 
-<br>
+- 서버 분리로 발생한 중복 결제·잔액 차감 실패를 **멱등키 기반 중복 차단 + 미확정 상태 자동 복구**로 해결
+- 매장별 선결제 포인트를 **충전 단위(Lot) FIFO 원장 + 조건부 원자 차감(단일 UPDATE 검증) + 비관락**으로 관리 → 동시 결제에도 정확한 잔액/유효기간 보장
+- Webhook 메시지 순서 역전으로 오래된 데이터가 최신을 덮어쓰는 문제를 **버전 기반 순서 판별 + tombstone**으로 해결 → 캐시-원본 최종 일관성 보장
+- 외부 PG(토스) 환불이 로컬 회수보다 먼저 실행돼 자금이 새는 경로를 **Saga 패턴(로컬 선커밋 → 외부 호출) + 멱등키·재시도**로 차단, 충전은 적립 실패 시 결제 취소로 설계 → 분산 트랜잭션 정합성 확보
 
-### 🦎 REPTOPIA
-> 파충류 이력 관리 기반 신뢰 거래 플랫폼 `2025.10 ~ 2025.12`
+#### 장애 격리 · 알림
 
-**구현 기능**
-- **CQRS + Facade 패턴** 도입으로 순환 참조 및 도메인 강결합 해소
-- Event-Driven 아키텍처로 Side-effect 처리 전환 → 도메인 간 결합도 50% 감소, 코드 40% 감축
-- Elasticsearch 없이 PostgreSQL GIN / GiST 인덱스만으로 검색 파이프라인 구축, 추가 인프라 비용 없이 검색 성능 확보
-
+- **Resilience4j 서킷브레이커**를 결제 쓰기/읽기/복구 경로별 독립 차단기로 분리, slow-call 기반 선제 감지로 타임아웃 누적 전 fail-fast → 장애 격리와 상태 복구 동시 확보
+- 접속 상태별 알림 누락을 **SSE + FCM + DB 저장, 재연결 시 유실 이벤트 재전송**으로 해결 → 전 상태에서 알림 도달 보장
 
 <br>
 
@@ -84,4 +84,3 @@ Velog : [https://velog.io/@k_joon_
 
 [![Gmail](https://img.shields.io/badge/bill5500@naver.com-03C75A?style=flat-square&logo=naver&logoColor=white)](mailto:bill5500@naver.com)
 <br>
-[![GitHub](https://img.shields.io/badge/welikeWatermelon-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/welikeWatermelon)
